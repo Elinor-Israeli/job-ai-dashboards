@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import { ChatTable } from "../ChatTable"
 import { aiService } from '../../services/ai.service'
 
 export function ChatAI() {
@@ -41,21 +42,17 @@ export function ChatAI() {
       const botMessage = {
         id: Date.now() + 1,
         role: 'bot',
-        // type: data.type || 'text',
-        type: 'text',
-        content: (
-          data.message
-          // data.type === 'chart' ? (
-          //   <Box>
-          //     <Typography variant="subtitle2">Chart Response:</Typography>
-          //     <img
-          //       src={data.imageUrl}
-          //       alt="Chart"
-          //       style={{ marginTop: 8, borderRadius: 4 }}
-          //     />
-          //   </Box>
-          // ) : (
-          //   data.reply || 'No reply received.'
+        type: data.message !== '' ? 'text' : 'table',
+        content:
+          data.message === '' ? (
+            <Box>
+              <Typography variant="subtitle2">Table with queried data:</Typography>
+              <ChatTable
+                rows={data.result}
+              />
+            </Box>
+          ) : (
+            data.message
           ),
       }
 
