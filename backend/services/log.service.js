@@ -1,4 +1,4 @@
-const Log = require('./models/Log')
+const Log = require('../models/Log')
 
 async function query(filterBy = {}, limit = 25, page = 0) {
   try {
@@ -37,10 +37,21 @@ function _buildCriteria(filterBy) {
       criteria.timestamp.$lte = new Date(filterBy.to)
     }
   }
-
   return criteria
 }
 
+
+async function runAggregation( pipeline) {
+  try {
+    const results = await Log.aggregate(pipeline)
+    return results
+  } catch (err) {
+    console.error('Aggregation error:', err)
+    return []
+  }
+}
+
 module.exports = {
-  query
+  query,
+  runAggregation
 }

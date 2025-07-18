@@ -1,4 +1,4 @@
-const logService = require('./log.service')
+const logService = require('./services/log.service')
 
 async function getLogs(req, res) {
   try {

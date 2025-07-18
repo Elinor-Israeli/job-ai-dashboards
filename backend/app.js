@@ -1,33 +1,30 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-require('dotenv').config()
-
-const logRoutes = require('./log.router')
-
 const dotenv = require('dotenv')
-
+const logRoutes = require('./log.router')
+const aiRoutes = require('./ai.router')
 
 dotenv.config()
+
 
 const app = express()
 const server = require('http').createServer(app)
 
 const corsOptions = {
-  origin: ['http://localhost:5173',
-           'http://localhost:5174'
-          ],
-  credentials: true
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  credentials: true,
 }
 app.use(cors(corsOptions))
 app.use(express.json())
+
+// Routes
 app.use('/api/logs', logRoutes)
+app.use('/api/ai', aiRoutes)
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('Connection error:', err))
-
-app.use('/api/logs', logRoutes)
 
 app.get('/', (req, res) => res.send('API is running'))
 
