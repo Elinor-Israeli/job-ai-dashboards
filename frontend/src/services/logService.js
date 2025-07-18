@@ -7,7 +7,7 @@ export const logService = {
   save,
 }
 
-function queryLogs(filter = {}, limit = 50) {
+function queryLogs(filter= {}, limit = 50) {
   return httpService.get(`logs`, { ...filter, limit })
 }
 

@@ -1,8 +1,16 @@
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
+import { loadLogs } from '../store/log.slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+
 
 export function JobLogsTable({ logs }) {
-  console.log('table logs', logs)
+  console.log('logs from table ', logs)
+  const dispatch = useDispatch()
+
+  const [page, setPage] = useState(0)
+  const [pageSize, setPageSize] = useState(25)
 
   const columns = [
     { field: 'transactionSourceName', headerName: 'Client', flex: 1 },
@@ -28,25 +36,38 @@ export function JobLogsTable({ logs }) {
       flex: 1,
       valueGetter: (value, row) => row?.progress?.TOTAL_JOBS_FAIL_INDEXED ?? 'N/A',
     }
-    
+
   ]
+
+  const handlePaginationModelChange = (newPaginationModel) => {
+    console.log('HANDLE PAGINATION MODEL CHANGE')
+
+    setPage(newPaginationModel.page)
+    setPageSize(newPaginationModel.pageSize)
+
+    dispatch(loadLogs({ page: newPaginationModel.page, pageSize: newPaginationModel.pageSize }))
+  }
 
   const rows = logs.map((log) => ({
     id: log._id,
     ...log,
   }))
-  console.log('rows', rows)
 
   return (
     <Box sx={{ height: 600, width: '100%', marginTop: 2 }}>
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={20}
-        rowsPerPageOptions={[10, 20, 50]}
+        rowCount={5000}
+        paginationMode="server"
+        page={page}
+        pageSize={pageSize}
+        onPaginationModelChange={handlePaginationModelChange}
+        rowsPerPageOptions={[10, 25, 50]}
         disableRowSelectionOnClick
         autoHeight
       />
     </Box>
   )
+
 }

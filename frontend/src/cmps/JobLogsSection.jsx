@@ -7,7 +7,7 @@ import { CircularProgress } from '@mui/material'
 
 export function JobLogsSection() {
   const dispatch = useDispatch()
-  const logs = useSelector(state => state.logs.data)
+  const logs = useSelector(state => state.logs.data.logs)
   const isLoading = useSelector(state => state.logs.loading)
 
   const [client, setClient] = useState('')
@@ -16,25 +16,24 @@ export function JobLogsSection() {
   const [toDate, setToDate] = useState('')
 
   useEffect(() => {
-    dispatch(loadLogs({ filter: {} }))
+    dispatch(loadLogs({ filterBy: {}, limit: 50 }))
   }, [dispatch])
 
   const handleFilter = () => {
-    const filter = {
+    const filterBy = {
       client,
       country,
       from: fromDate,
       to: toDate
     }
-    dispatch(loadLogs({ filter }))
+    dispatch(loadLogs({ filterBy, limit: 50 }))
   }
 
   console.log('logs from section', logs)
 
   return (
     <section>
-      <h2>Job Logs</h2>
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
         <input
           type="text"
           placeholder="Client"
@@ -61,7 +60,14 @@ export function JobLogsSection() {
       </div>
 
       {isLoading ?
-        <Box sx={{ display: 'flex' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 300
+          }}
+        >
           <CircularProgress />
         </Box> :
         <JobLogsTable logs={logs} />}

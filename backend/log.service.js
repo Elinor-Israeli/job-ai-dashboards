@@ -1,12 +1,16 @@
 const Log = require('./models/Log')
 
-async function query(filterBy = {}, limit = 100) {
+async function query(filterBy = {}, limit = 25, page = 0) {
   try {
     const criteria = _buildCriteria(filterBy)
     const logs = await Log.find(criteria)
+      .skip(page * limit)
       .limit(limit)
       .sort({ timestamp: -1 })
-    return logs
+      
+    const total = await Log.countDocuments(criteria)
+    return { logs, total }
+
   } catch (err) {
     console.error('Failed to fetch logs:', err)
     throw err

@@ -23,13 +23,14 @@ async function getLogs(req, res) {
       }
     }
 
-    const limit = +req.query.limit || 100
-    const logs = await logService.query(filterBy, limit)
+    const page = parseInt(req.query.page) || 0
+    const pageSize = parseInt(req.query.pageSize) || 25
 
-    res.json(logs)
+    const { logs, total } = await logService.query(filterBy, pageSize, page)
+    res.json({ logs, total })
   } catch (err) {
     console.error('Failed to get logs', err)
-    res.status(400).send({ err: 'Failed to get logs' })
+    res.status(500).send({ error: 'Failed to get logs', detail: err.message })
   }
 }
 
