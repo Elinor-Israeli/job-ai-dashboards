@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { logService} from '../services/logService'
+import { logService} from '../services/log.service'
 
 
 //fetch the logs from backend 

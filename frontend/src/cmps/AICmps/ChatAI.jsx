@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Box,
   TextField,
@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
+import { aiService } from '../../services/ai.service'
 
 export function ChatAI() {
   const [messages, setMessages] = useState([])
@@ -19,40 +20,58 @@ export function ChatAI() {
     }
   }, [messages])
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return
 
-    const newMessage = {
+    const userMessage = {
       id: Date.now(),
       role: 'user',
       type: 'text',
       content: input,
     }
 
-    setMessages(prev => [...prev, newMessage])
+    setMessages(prev => [...prev, userMessage])
     setInput('')
 
-    // Simulate bot reply
-    setTimeout(() => {
+    try {
+      const data = await aiService.askQuestion(input)
+
+      console.log(data)
+
+      const botMessage = {
+        id: Date.now() + 1,
+        role: 'bot',
+        // type: data.type || 'text',
+        type: 'text',
+        content: (
+          data.message
+          // data.type === 'chart' ? (
+          //   <Box>
+          //     <Typography variant="subtitle2">Chart Response:</Typography>
+          //     <img
+          //       src={data.imageUrl}
+          //       alt="Chart"
+          //       style={{ marginTop: 8, borderRadius: 4 }}
+          //     />
+          //   </Box>
+          // ) : (
+          //   data.reply || 'No reply received.'
+          ),
+      }
+
+      setMessages(prev => [...prev, botMessage])
+    } catch (err) {
+      console.error('AI Error:', err)
       setMessages(prev => [
         ...prev,
         {
-          id: Date.now() + 1,
+          id: Date.now() + 2,
           role: 'bot',
-          type: 'custom',
-          content: (
-            <Box>
-              <Typography variant="subtitle2">Bot Chart Example:</Typography>
-              <img
-                src="https://via.placeholder.com/300x150?text=Chart"
-                alt="Chart"
-                style={{ marginTop: 8, borderRadius: 4 }}
-              />
-            </Box>
-          ),
+          type: 'text',
+          content: 'Error: Unable to connect to AI service.',
         },
       ])
-    }, 1000)
+    }
   }
 
   const renderMessage = (msg) => {
@@ -96,7 +115,7 @@ export function ChatAI() {
       borderColor="grey.300"
       borderRadius={2}
     >
-      {/* Message History */}
+      {/* Messages */}
       <Box
         ref={containerRef}
         flexGrow={1}
@@ -107,7 +126,7 @@ export function ChatAI() {
         {messages.map(renderMessage)}
       </Box>
 
-      {/* Input Area */}
+      {/* Input */}
       <Box
         display="flex"
         alignItems="center"
