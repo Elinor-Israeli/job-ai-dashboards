@@ -54,7 +54,7 @@ export function JobLogsTable({ logs }) {
   }))
 
   return (
-    <Box sx={{ height: 600, width: '100%', marginTop: 2 }}>
+    <Box sx={{ height: '20%', width: '50%', marginTop: 2 , justifySelf:'center'}}>
       <DataGrid
         rows={rows}
         columns={columns}

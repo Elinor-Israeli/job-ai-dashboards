@@ -17,6 +17,34 @@ async function query(filterBy = {}, limit = 25, page = 0) {
   }
 }
 
+async function getLogsTotal(fromDate) {
+  try {
+    const results = await Log.aggregate([
+      {
+        $match: {
+          timestamp: { $gte: fromDate },
+          status: 'completed'
+        }
+      },
+      {
+        $group: {
+          _id: "$transactionSourceName",
+          totalJobsSentToIndex: { $sum: "$progress.TOTAL_JOBS_SENT_TO_INDEX" },
+          totalJobsDontHaveMetadata: { $sum: "$progress.TOTAL_JOBS_DONT_HAVE_METADATA_V2" },
+          totalJobsSentToEnrich: { $sum: "$progress.TOTAL_JOBS_SENT_TO_ENRICH" },
+          totalJobsFailedIndex: { $sum: "$progress.TOTAL_JOBS_FAIL_INDEXED" },
+          totalRecordsInFeed: { $sum: "$progress.TOTAL_RECORDS_IN_FEED" },
+          totalJobsInFeed: { $sum: "$progress.TOTAL_JOBS_IN_FEED" },
+        }
+      }
+    ])
+    return results
+  } catch (err) {
+    console.error('Aggregation error:', err)
+    return []
+  }
+}
+
 function _buildCriteria(filterBy) {
   const criteria = {}
 
@@ -53,5 +81,6 @@ async function runAggregation( pipeline) {
 
 module.exports = {
   query,
-  runAggregation
+  runAggregation,
+  getLogsTotal,
 }

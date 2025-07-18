@@ -4,6 +4,7 @@ import { loadLogs } from '../store/log.slice'
 import { JobLogsTable } from './JobLogsTable'
 import { Box } from '@mui/material'
 import { CircularProgress } from '@mui/material'
+import { JobLogsChart } from './JobLogsChart'
 
 export function JobLogsSection() {
   const dispatch = useDispatch()
@@ -70,8 +71,11 @@ export function JobLogsSection() {
         >
           <CircularProgress />
         </Box> :
-        <JobLogsTable logs={logs} />}
-    </section>
+        <div>
+          <JobLogsTable logs={logs} />
+          <JobLogsChart />
+          </div>
+      }
+      </section>
   )
 }
-

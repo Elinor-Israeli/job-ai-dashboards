@@ -34,6 +34,19 @@ async function getLogs(req, res) {
   }
 }
 
+async function getAggregatedLogCounts(req, res) {
+  try {
+    const fromDate = new Date(req.query.from)
+    fromDate.setUTCHours(0, 0, 0, 0)
+    const totals = await logService.getLogsTotal(fromDate)
+    res.json({ totals })
+  } catch (err) {
+    console.error('Failed to get aggregated log counts', err)
+    res.status(500).send({ error: 'Failed to get aggregated log counts', detail: err.message })
+  }
+}
+
 module.exports = {
-  getLogs
+  getLogs,
+  getAggregatedLogCounts
 }
