@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { LineChart } from '@mui/x-charts/LineChart'
-import { logService } from '../services/log.service'
+import { logService } from '../../services/log.service'
 
 export function JobLogsLineChart() {
   const [dataset, setDataset] = useState([])

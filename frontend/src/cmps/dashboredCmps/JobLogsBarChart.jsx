@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
-import { logService} from '../services/log.service'
+import { logService} from '../../services/log.service'
 
 export function JobLogsBarChart() {
   const [totals, setTotals] = useState([])

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadLogs } from '../store/log.slice'
+import { loadLogs } from '../../store/log.slice'
 import { JobLogsTable } from './JobLogsTable'
 import { Box, Stack, TextField, Button, CircularProgress } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'

@@ -1,6 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
-import { loadLogs } from '../store/log.slice'
+import { loadLogs } from '../../store/log.slice'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
