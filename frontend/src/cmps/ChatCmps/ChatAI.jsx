@@ -9,7 +9,7 @@ import {
 import SendIcon from '@mui/icons-material/Send'
 import { ChatTable } from './ChatTable'
 import { aiService } from '../../services/ai.service'
-import { ChatBarChart } from './ChatBarChart'
+import { ChatCharts } from './ChatCharts'
 
 export function ChatAI() {
   const [messages, setMessages] = useState([])
@@ -51,7 +51,7 @@ export function ChatAI() {
               <Typography variant="subtitle2">{data.message}</Typography>
               {dataType === 'table' ? <ChatTable
                 rows={data.result}
-              /> : <ChatBarChart mode={dataType} rows={data.result} xAxis={data.x_axis} fields={data.fields} />}
+              /> : <ChatCharts mode={dataType} rows={data.result} xAxis={data.x_axis} fields={data.fields} />}
             </Box>
           ),
       }
@@ -105,7 +105,7 @@ export function ChatAI() {
       display="flex"
       flexDirection="column"
       height="80vh"
-      maxWidth="600px"
+      maxWidth="100%"
       mx="auto"
       mt={4}
       border={1}
