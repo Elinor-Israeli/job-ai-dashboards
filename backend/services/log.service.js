@@ -40,6 +40,12 @@ async function getLogsTotal(fromDate) {
     ])
     const allResults = await Log.aggregate([
       {
+        $match: {
+          timestamp: { $gte: fromDate },
+          status: 'completed'
+        }
+      },
+      {
         $group: {
           _id: null,
           totalJobsSentToIndex: { $sum: "$progress.TOTAL_JOBS_SENT_TO_INDEX" },
@@ -55,6 +61,47 @@ async function getLogsTotal(fromDate) {
     return allResults.concat(resultsPerClient)
   } catch (err) {
     console.error('Aggregation error:', err)
+    return []
+  }
+}
+
+// TODO: This only support hourly resolution. Add resolution parameter and group accordingly
+async function getLogsTotalOverTime(fromDate) {
+  try {
+    const results = await Log.aggregate([
+      {
+        $match: {
+          timestamp: { $gte: fromDate },
+          status: 'completed'
+        }
+      },
+      {
+        $project: {
+          transactionSourceName: 1,
+          progress: 1,
+          hourDate: {
+            $dateTrunc: {
+              date: "$timestamp",
+              unit: "hour",
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$hourDate",
+          totalJobsSentToIndex: { $sum: "$progress.TOTAL_JOBS_SENT_TO_INDEX" },
+          totalJobsDontHaveMetadata: { $sum: "$progress.TOTAL_JOBS_DONT_HAVE_METADATA_V2" },
+          totalJobsSentToEnrich: { $sum: "$progress.TOTAL_JOBS_SENT_TO_ENRICH" },
+          totalJobsFailedIndex: { $sum: "$progress.TOTAL_JOBS_FAIL_INDEXED" },
+          totalRecordsInFeed: { $sum: "$progress.TOTAL_RECORDS_IN_FEED" },
+          totalJobsInFeed: { $sum: "$progress.TOTAL_JOBS_IN_FEED" },
+        }
+      }
+    ])
+    return results
+  } catch (err) {
+    console.error('Aggregation over time error:', err)
     return []
   }
 }
@@ -97,4 +144,5 @@ module.exports = {
   query,
   runAggregation,
   getLogsTotal,
+  getLogsTotalOverTime,
 }

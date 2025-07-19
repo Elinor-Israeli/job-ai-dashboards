@@ -46,7 +46,20 @@ async function getAggregatedLogCounts(req, res) {
   }
 }
 
+async function getLogCountsOverTime(req, res) {
+  try {
+    const fromDate = new Date(req.query.from)
+    fromDate.setUTCHours(0, 0, 0, 0)
+    const totals = await logService.getLogsTotalOverTime(fromDate)
+    res.json({ totals })
+  } catch (err) {
+    console.error('Failed to get log counts over time', err)
+    res.status(500).send({ error: 'Failed to get log counts over time', detail: err.message })
+  }
+}
+
 module.exports = {
   getLogs,
-  getAggregatedLogCounts
+  getAggregatedLogCounts,
+  getLogCountsOverTime
 }

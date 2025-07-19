@@ -4,7 +4,8 @@ import { loadLogs } from '../store/log.slice'
 import { JobLogsTable } from './JobLogsTable'
 import { Box } from '@mui/material'
 import { CircularProgress } from '@mui/material'
-import { JobLogsChart } from './JobLogsChart'
+import { JobLogsBarChart } from './JobLogsBarChart'
+import { JobLogsLineChart } from './JobLogsLineChart'
 
 export function JobLogsSection() {
   const dispatch = useDispatch()
@@ -29,8 +30,6 @@ export function JobLogsSection() {
     }
     dispatch(loadLogs({ filterBy, limit: 50 }))
   }
-
-  console.log('logs from section', logs)
 
   return (
     <section>
@@ -73,8 +72,9 @@ export function JobLogsSection() {
         </Box> :
         <div>
           <JobLogsTable logs={logs} />
-          <JobLogsChart />
-          </div>
+          <JobLogsBarChart />
+          <JobLogsLineChart />
+        </div>
       }
       </section>
   )

@@ -17,9 +17,6 @@ async function answerQuestion(req, res) {
 
     const result = await runAggregation(aiResponse.pipeline)
 
-    console.log("aiResponse.pipeline", JSON.stringify(aiResponse.pipeline))
-    console.log("result", result)
-
     if (result.length === 1){
         const explanation = await aiService.humanLikeExplanation(question, result[0])
         return res.json({ message: explanation })

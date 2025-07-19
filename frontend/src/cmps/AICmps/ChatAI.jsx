@@ -37,8 +37,6 @@ export function ChatAI() {
     try {
       const data = await aiService.askQuestion(input)
 
-      console.log(data)
-
       const botMessage = {
         id: Date.now() + 1,
         role: 'bot',

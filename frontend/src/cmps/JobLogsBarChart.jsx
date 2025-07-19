@@ -3,7 +3,7 @@ import { Box, CircularProgress } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { logService} from '../services/log.service'
 
-export function JobLogsChart() {
+export function JobLogsBarChart() {
   const [totals, setTotals] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -11,7 +11,7 @@ export function JobLogsChart() {
       const fetchData = async () => {
         try {
           // TODO: only get totals from last day. Make it configurable
-          const {totals} = await logService.queryLogTotals(new Date(Date.now() - 24 * 60 * 60 * 1000))
+          const {totals} = await logService.queryLogTotals(new Date("2025-07-13T00:00:00Z"))
           setTotals(totals)
           setIsLoading(false)
         } catch (err) {
@@ -37,8 +37,6 @@ export function JobLogsChart() {
   }
 
   const allTotals = Object.entries(totals.find(total => total._id === "All")).filter(row => row[0] !== "_id")
-
-  console.log(allTotals)
 
   return (
     <BarChart

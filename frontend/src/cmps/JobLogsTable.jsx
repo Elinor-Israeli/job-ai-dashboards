@@ -6,7 +6,6 @@ import { useState } from 'react'
 
 
 export function JobLogsTable({ logs }) {
-  console.log('logs from table ', logs)
   const dispatch = useDispatch()
 
   const [page, setPage] = useState(0)
@@ -40,8 +39,6 @@ export function JobLogsTable({ logs }) {
   ]
 
   const handlePaginationModelChange = (newPaginationModel) => {
-    console.log('HANDLE PAGINATION MODEL CHANGE')
-
     setPage(newPaginationModel.page)
     setPageSize(newPaginationModel.pageSize)
 

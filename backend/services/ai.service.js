@@ -105,7 +105,6 @@ async function humanLikeExplanation (question, oneResult){
   You can answer back in this way : "A total of 89,242 documents in the database have progress.SWITCH_INDEX set to true." or like
   "There are 89,242 documents where SWITCH_INDEX is set to true."
   `
-  console.log(prompt)
 
   const result = await ai.models.generateContent({
     model: 'gemini-2.0-flash',
