@@ -7,7 +7,7 @@ async function query(filterBy = {}, limit = 25, page = 0) {
       .skip(page * limit)
       .limit(limit)
       .sort({ timestamp: -1 })
-      
+
     const total = await Log.countDocuments(criteria)
     return { logs, total }
 
@@ -19,7 +19,7 @@ async function query(filterBy = {}, limit = 25, page = 0) {
 
 async function getLogsTotal(fromDate) {
   try {
-    const results = await Log.aggregate([
+    const resultsPerClient = await Log.aggregate([
       {
         $match: {
           timestamp: { $gte: fromDate },
@@ -38,7 +38,21 @@ async function getLogsTotal(fromDate) {
         }
       }
     ])
-    return results
+    const allResults = await Log.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalJobsSentToIndex: { $sum: "$progress.TOTAL_JOBS_SENT_TO_INDEX" },
+          totalJobsDontHaveMetadata: { $sum: "$progress.TOTAL_JOBS_DONT_HAVE_METADATA_V2" },
+          totalJobsSentToEnrich: { $sum: "$progress.TOTAL_JOBS_SENT_TO_ENRICH" },
+          totalJobsFailedIndex: { $sum: "$progress.TOTAL_JOBS_FAIL_INDEXED" },
+          totalRecordsInFeed: { $sum: "$progress.TOTAL_RECORDS_IN_FEED" },
+          totalJobsInFeed: { $sum: "$progress.TOTAL_JOBS_IN_FEED" },
+        }
+      }
+    ])
+    allResults[0]._id = "All"
+    return allResults.concat(resultsPerClient)
   } catch (err) {
     console.error('Aggregation error:', err)
     return []
@@ -69,7 +83,7 @@ function _buildCriteria(filterBy) {
 }
 
 
-async function runAggregation( pipeline) {
+async function runAggregation(pipeline) {
   try {
     const results = await Log.aggregate(pipeline)
     return results

@@ -7,7 +7,7 @@ export const loadLogs = createAsyncThunk(
   'logs/loadLogs',
   async ({ filter, page, pageSize }) => {
     const params = { ...filter, page, pageSize }
-    const res = logService.queryLogs(params)
+    const res = await logService.queryLogs(params)
     return res
   }
 )
