@@ -15,3 +15,14 @@
 Dashboard address: http://localhost:5173/
 ChatUI address : http://localhost:5173/aichat/
 
+## Photos
+
+### Dashboard
+<img width="1915" height="931" alt="Dashboard table" src="https://github.com/user-attachments/assets/fa6d0991-7145-46d6-bc3e-ffc33d8cfd99" />
+<img width="1885" height="873" alt="Dashboard charts" src="https://github.com/user-attachments/assets/615ed6bc-6aa6-4e9a-b94b-0d62bc0481fd" />
+
+### Chat response
+<img width="1916" height="947" alt="Bar Chart in Chat" src="https://github.com/user-attachments/assets/f4847570-11d1-471b-9403-6e14613623e0" />
+<img width="730" height="814" alt="Table in chat" src="https://github.com/user-attachments/assets/82af3764-4ea5-4e7e-8986-f2dc09a8c51c" />
+<img width="1914" height="924" alt="Line Chart In Chat" src="https://github.com/user-attachments/assets/1707e6bb-8b92-4fb0-9144-3c0fc95399a8" />
+
