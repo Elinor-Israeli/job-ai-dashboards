@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const aiController = require('./ai.controller')
+const aiController = require('../controllers/ai.controller')
 
 router.get('/', aiController.answerQuestion)
 

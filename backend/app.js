@@ -2,8 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const dotenv = require('dotenv')
-const logRoutes = require('./log.router')
-const aiRoutes = require('./ai.router')
+const logRoutes = require('./routes/log.router')
+const aiRoutes = require('./routes/ai.router')
 
 dotenv.config()
 

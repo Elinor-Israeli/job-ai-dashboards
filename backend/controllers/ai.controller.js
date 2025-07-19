@@ -1,5 +1,5 @@
-const aiService = require('./services/ai.service')
-const { runAggregation } = require('./services/log.service')
+const aiService = require('../services/ai.service')
+const { runAggregation } = require('../services/log.service')
 
 async function answerQuestion(req, res) {
   try {
