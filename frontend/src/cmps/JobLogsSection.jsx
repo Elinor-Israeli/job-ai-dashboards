@@ -2,62 +2,73 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadLogs } from '../store/log.slice'
 import { JobLogsTable } from './JobLogsTable'
-import { Box } from '@mui/material'
-import { CircularProgress } from '@mui/material'
+import { Box , Stack,TextField,Button, CircularProgress} from '@mui/material'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { JobLogsBarChart } from './JobLogsBarChart'
 import { JobLogsLineChart } from './JobLogsLineChart'
+import dayjs from 'dayjs'
 
 export function JobLogsSection() {
   const dispatch = useDispatch()
   const logs = useSelector(state => state.logs.data.logs)
+  const total = useSelector(state => state.logs.data.total)
+  console.log(total)
   const isLoading = useSelector(state => state.logs.loading)
 
   const [client, setClient] = useState('')
   const [country, setCountry] = useState('')
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
+  const [fromDate, setFromDate] = useState(null)
+  const [toDate, setToDate] = useState(null)
 
   useEffect(() => {
     dispatch(loadLogs({ filterBy: {}, limit: 50 }))
   }, [dispatch])
 
-  const handleFilter = () => {
+  const handleFilter = () => {    
     const filterBy = {
       client,
       country,
-      from: fromDate,
-      to: toDate
+      from: fromDate?.toISOString(),
+      to: toDate?.toISOString()
     }
+    console.log('Filtering with:', filterBy)
     dispatch(loadLogs({ filterBy, limit: 50 }))
   }
 
   return (
     <section>
-      <div style={{ marginBottom: '2rem' }}>
-        <input
-          type="text"
-          placeholder="Client"
-          value={client}
-          onChange={(e) => setClient(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Country"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        />
-        <input
-          type="date"
-          value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={toDate}
-          onChange={(e) => setToDate(e.target.value)}
-        />
-        <button onClick={handleFilter}>Filter</button>
-      </div>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Stack direction="row" spacing={2} alignItems="center" mb={4} flexWrap="wrap">
+          <TextField
+            label="Client"
+            size="small"
+            value={client}
+            onChange={(e) => setClient(e.target.value)}
+          />
+          <TextField
+            label="Country"
+            size="small"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          />
+          <DatePicker
+            label="From"
+            value={fromDate}
+            onChange={(newValue) => setFromDate(dayjs(newValue))}
+            slotProps={{ textField: { size: 'small' } }}
+          />
+          <DatePicker
+            label="To"
+            value={toDate}
+            onChange={(newValue) => setToDate(dayjs(newValue))}
+            slotProps={{ textField: { size: 'small' } }}
+          />
+          <Button variant="contained" size="small" onClick={handleFilter}>
+            Filter
+          </Button>
+        </Stack>
+      </LocalizationProvider>
 
       {isLoading ?
         <Box
@@ -71,7 +82,7 @@ export function JobLogsSection() {
           <CircularProgress />
         </Box> :
         <div>
-          <JobLogsTable logs={logs} />
+          <JobLogsTable logs={logs} total={total}/>
           <JobLogsBarChart />
           <JobLogsLineChart />
         </div>

@@ -5,18 +5,20 @@ import { logService} from '../services/log.service'
 //fetch the logs from backend 
 export const loadLogs = createAsyncThunk(
   'logs/loadLogs',
-  async ({ filter, page, pageSize }) => {
-    const params = { ...filter, page, pageSize }
-    const res = await logService.queryLogs(params)
+  async (args) => {
+    console.log("args", args)
+    const res = await logService.queryLogs(args)
     return res
   }
 )
+
 
 const logSlice = createSlice({
     name:'logs',
     initialState: {
     data: {
       logs: [],
+      total: 0,
     },
     loading: false,
     error: null

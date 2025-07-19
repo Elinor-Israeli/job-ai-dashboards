@@ -1,13 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid'
 import { Box } from '@mui/material'
 import { loadLogs } from '../store/log.slice'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
 
-export function JobLogsTable({ logs }) {
-  const dispatch = useDispatch()
+export function JobLogsTable({ logs , total }) {
 
+  const dispatch = useDispatch()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(25)
 
@@ -55,12 +55,13 @@ export function JobLogsTable({ logs }) {
       <DataGrid
         rows={rows}
         columns={columns}
-        rowCount={5000}
+        rowCount={total}
         paginationMode="server"
         page={page}
         pageSize={pageSize}
         onPaginationModelChange={handlePaginationModelChange}
         rowsPerPageOptions={[10, 25, 50]}
+        disableColumnFilter
         disableRowSelectionOnClick
         autoHeight
       />

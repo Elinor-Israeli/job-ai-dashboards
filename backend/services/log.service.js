@@ -77,7 +77,6 @@ async function getLogsTotalOverTime(fromDate) {
       },
       {
         $project: {
-          transactionSourceName: 1,
           progress: 1,
           hourDate: {
             $dateTrunc: {
@@ -126,6 +125,7 @@ function _buildCriteria(filterBy) {
       criteria.timestamp.$lte = new Date(filterBy.to)
     }
   }
+  console.log("criteria", criteria)
   return criteria
 }
 

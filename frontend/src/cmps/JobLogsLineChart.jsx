@@ -39,7 +39,7 @@ export function JobLogsLineChart() {
     )
   }
 
-  dataset.sort((a, b) => a._id - b._id);
+  dataset.sort((a, b) => a._id - b._id)
 
   return (
     <LineChart

@@ -6,9 +6,17 @@ export const logService = {
   queryLogTotalsOverTime,
 }
 
-async function queryLogs(filter= {}, limit = 50) {
-  return httpService.get(`logs`, { ...filter, limit })
+async function queryLogs({ filterBy = {}, page = 0, pageSize = 50 }) {
+   console.log('Sending request with params:',{ filterBy, page , pageSize })
+  return httpService.get('logs', {
+    params: {
+      ...filterBy,
+      page,
+      pageSize
+    }
+  })
 }
+
 
 async function queryLogTotals(from) {
   return httpService.get(`logs/totals`, { from })
