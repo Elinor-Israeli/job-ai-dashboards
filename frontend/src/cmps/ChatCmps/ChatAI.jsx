@@ -7,8 +7,9 @@ import {
   Typography,
 } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send'
-import { ChatTable } from "../ChatTable"
+import { ChatTable } from './ChatTable'
 import { aiService } from '../../services/ai.service'
+import { ChatBarChart } from './ChatBarChart'
 
 export function ChatAI() {
   const [messages, setMessages] = useState([])
@@ -36,21 +37,22 @@ export function ChatAI() {
 
     try {
       const data = await aiService.askQuestion(input)
+      const dataType = data.mode ? data.mode : "text";
 
       const botMessage = {
         id: Date.now() + 1,
         role: 'bot',
-        type: data.message !== '' ? 'text' : 'table',
+        type: dataType,
         content:
-          data.message === '' ? (
-            <Box>
-              <Typography variant="subtitle2">Table with queried data:</Typography>
-              <ChatTable
-                rows={data.result}
-              />
-            </Box>
-          ) : (
+          dataType === 'text' ? (
             data.message
+          ) : (
+            <Box>
+              <Typography variant="subtitle2">{data.message}</Typography>
+              {dataType === 'table' ? <ChatTable
+                rows={data.result}
+              /> : <ChatBarChart mode={dataType} rows={data.result} xAxis={data.x_axis} fields={data.fields} />}
+            </Box>
           ),
       }
 
