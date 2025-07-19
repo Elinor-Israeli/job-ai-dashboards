@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { logService} from '../services/log.service'
+import { logService } from '../services/log.service'
 
 
 //fetch the logs from backend 
@@ -13,8 +13,8 @@ export const loadLogs = createAsyncThunk(
 
 
 const logSlice = createSlice({
-    name:'logs',
-    initialState: {
+  name: 'logs',
+  initialState: {
     data: {
       logs: [],
       total: 0,

@@ -8,12 +8,10 @@ export const logService = {
 
 async function queryLogs({ filterBy = {}, page = 0, pageSize = 50 }) {
   return httpService.get('logs', {
-    params: {
-      ...filterBy,
-      page,
-      pageSize
-    }
-  })
+  ...filterBy,
+  page,
+  pageSize
+})
 }
 
 

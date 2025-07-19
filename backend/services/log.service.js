@@ -129,7 +129,6 @@ function _buildCriteria(filterBy) {
       criteria.timestamp.$lte = new Date(filterBy.to)
     }
   }
-  console.log('criteria', criteria)
   return criteria
 }
 

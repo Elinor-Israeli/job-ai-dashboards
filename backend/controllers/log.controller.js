@@ -3,11 +3,10 @@ const logService = require('../services/log.service')
 async function getLogs(req, res) {
   try {
     const filterBy = {}
-
     if (req.query.client) filterBy.client = req.query.client
     if (req.query.country) filterBy.country = req.query.country
 
-    if (req.query.from || req.query.params.to) {
+    if (req.query.from || req.query.to) {
       filterBy.timestamp = {}
 
       if (req.query.from) {
