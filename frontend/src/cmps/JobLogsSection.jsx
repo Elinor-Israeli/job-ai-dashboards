@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadLogs } from '../store/log.slice'
 import { JobLogsTable } from './JobLogsTable'
-import { Box , Stack,TextField,Button, CircularProgress} from '@mui/material'
+import { Box, Stack, TextField, Button, CircularProgress } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { JobLogsBarChart } from './JobLogsBarChart'
@@ -24,7 +24,7 @@ export function JobLogsSection() {
     dispatch(loadLogs({ filterBy: {}, limit: 50 }))
   }, [dispatch])
 
-  const handleFilter = () => {    
+  const handleFilter = () => {
     const filterBy = {
       client,
       country,
@@ -35,9 +35,18 @@ export function JobLogsSection() {
   }
 
   return (
-    <section>
+    <section >
+      <JobLogsBarChart />
+      <JobLogsLineChart />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Stack direction="row" spacing={2} alignItems="center" mb={4} flexWrap="wrap">
+        <Stack direction="row" spacing={2} alignItems="center" mb={4} flexWrap="wrap"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '32px'
+          }}
+        >
           <TextField
             label="Client"
             size="small"
@@ -80,11 +89,9 @@ export function JobLogsSection() {
           <CircularProgress />
         </Box> :
         <div>
-          <JobLogsTable logs={logs} total={total}/>
-          <JobLogsBarChart />
-          <JobLogsLineChart />
+          <JobLogsTable logs={logs} total={total} />
         </div>
       }
-      </section>
+    </section>
   )
 }

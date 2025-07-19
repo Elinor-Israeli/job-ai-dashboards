@@ -13,13 +13,11 @@ export function ChatCharts({ mode, rows, xAxis, fields }) {
         }))
     }
     
-
     dataset.sort((a, b) => {
         const aVal = a[xAxis]
         const bVal = b[xAxis]
         return aVal > bVal ? 1 : aVal < bVal ? -1 : 0
     })
-
 
     const series = fields.map((field) => ({
         dataKey: field.name,

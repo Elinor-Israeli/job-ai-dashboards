@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { logService} from '../services/log.service'
 
@@ -39,6 +39,10 @@ export function JobLogsBarChart() {
   const allTotals = totals.filter(total => total._id === "All")
 
   return (
+      <Box sx={{ width: '100%', maxWidth: '1000px', margin: 'auto', mt: 4 }}>
+      <Typography variant="h6" align="center" gutterBottom>
+        Top events in the last day
+      </Typography>
     <BarChart
       xAxis={[
         {
@@ -74,5 +78,6 @@ export function JobLogsBarChart() {
       dataset={allTotals}
       height={300}
     />
+    </Box>
   )
 }

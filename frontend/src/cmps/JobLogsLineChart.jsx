@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { LineChart } from '@mui/x-charts/LineChart'
 import { logService } from '../services/log.service'
 
@@ -42,6 +42,10 @@ export function JobLogsLineChart() {
   dataset.sort((a, b) => a._id - b._id)
 
   return (
+     <Box sx={{ width: '100%', maxWidth: '1000px', margin: 'auto', mt: 4 }}>
+          <Typography variant="h6" align="center" gutterBottom>
+            Top events During the last day
+          </Typography>
     <LineChart
       xAxis={[
         {
@@ -78,5 +82,7 @@ export function JobLogsLineChart() {
       dataset={dataset}
       height={300}
     />
+        </Box>
+    
   )
 }
