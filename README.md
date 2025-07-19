@@ -1,4 +1,4 @@
-# job ai dashboards
+# Job AI Dashboards
 
 ## Setup steps
 1. To the project database (jobskill) Import `./transformedFeeds.json` to your collection and name it jobskill-logs.
