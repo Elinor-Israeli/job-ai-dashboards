@@ -36,12 +36,42 @@ export function JobLogsBarChart() {
     )
   }
 
-  const allTotals = Object.entries(totals.find(total => total._id === "All")).filter(row => row[0] !== "_id")
+  const allTotals = totals.filter(total => total._id === "All")
 
   return (
     <BarChart
-      xAxis={[{ data: allTotals.map(t => t[0]) }]}
-      series={[{ data: allTotals.map(t => t[1]) }]}
+      xAxis={[
+        {
+          dataKey: '_id',
+        },
+      ]}
+      series={[
+        {
+          dataKey: 'totalJobsSentToIndex',
+          label: 'JobsSentToIndex',
+        },
+        {
+          dataKey: 'totalJobsDontHaveMetadata',
+          label: 'JobsDontHaveMetadata',
+        },
+        {
+          dataKey: 'totalJobsSentToEnrich',
+          label: 'JobsSentToEnrich',
+        },
+        {
+          dataKey: 'totalJobsFailedIndex',
+          label: 'JobsFailedIndex',
+        },
+        {
+          dataKey: 'totalRecordsInFeed',
+          label: 'RecordsInFeed',
+        },
+        {
+          dataKey: 'totalJobsInFeed',
+          label: 'JobsInFeed',
+        },
+      ]}
+      dataset={allTotals}
       height={300}
     />
   )
