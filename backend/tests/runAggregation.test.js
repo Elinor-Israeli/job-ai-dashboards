@@ -23,7 +23,6 @@ async function testAggregation() {
 
   try {
     const result = await runAggregation(input)
-    console.log('Aggregation result:', result)
   } catch (err) {
     console.error('Error:', err)
   } finally {

@@ -6,7 +6,6 @@ import { logService} from '../services/log.service'
 export const loadLogs = createAsyncThunk(
   'logs/loadLogs',
   async (args) => {
-    console.log("args", args)
     const res = await logService.queryLogs(args)
     return res
   }

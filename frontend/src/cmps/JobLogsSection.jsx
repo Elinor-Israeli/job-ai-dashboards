@@ -13,7 +13,6 @@ export function JobLogsSection() {
   const dispatch = useDispatch()
   const logs = useSelector(state => state.logs.data.logs)
   const total = useSelector(state => state.logs.data.total)
-  console.log(total)
   const isLoading = useSelector(state => state.logs.loading)
 
   const [client, setClient] = useState('')
@@ -32,7 +31,6 @@ export function JobLogsSection() {
       from: fromDate?.toISOString(),
       to: toDate?.toISOString()
     }
-    console.log('Filtering with:', filterBy)
     dispatch(loadLogs({ filterBy, limit: 50 }))
   }
 

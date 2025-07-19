@@ -7,7 +7,6 @@ export const logService = {
 }
 
 async function queryLogs({ filterBy = {}, page = 0, pageSize = 50 }) {
-   console.log('Sending request with params:',{ filterBy, page , pageSize })
   return httpService.get('logs', {
     params: {
       ...filterBy,
