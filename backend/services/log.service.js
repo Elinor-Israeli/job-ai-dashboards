@@ -116,6 +116,10 @@ function _buildCriteria(filterBy) {
     criteria.country_code = filterBy.country
   }
 
+  if (filterBy.currency){
+    criteria.currency_code = filterBy.currency
+  }
+
   if (filterBy.from || filterBy.to) {
     criteria.timestamp = {}
     if (filterBy.from) {
@@ -125,6 +129,7 @@ function _buildCriteria(filterBy) {
       criteria.timestamp.$lte = new Date(filterBy.to)
     }
   }
+  console.log('criteria', criteria)
   return criteria
 }
 
