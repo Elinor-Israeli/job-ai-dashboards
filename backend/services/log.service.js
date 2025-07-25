@@ -3,10 +3,11 @@ const Log = require('../models/Log')
 async function query(filterBy = {}, limit = 25, page = 0) {
   try {
     const criteria = _buildCriteria(filterBy)
+    const sort = _buildSort(filterBy)  
     const logs = await Log.find(criteria)
       .skip(page * limit)
       .limit(limit)
-      .sort({ timestamp: -1 })
+      .sort(sort)
 
     const total = await Log.countDocuments(criteria)
     return { logs, total }
@@ -131,6 +132,26 @@ function _buildCriteria(filterBy) {
   }
   return criteria
 }
+
+function _buildSort(filterBy) {
+  if (!filterBy.sortField) return { timestamp: -1 }
+
+  const nestedFields = [
+    'TOTAL_JOBS_FAIL_INDEXED',
+    'TOTAL_JOBS_SENT_TO_INDEX',
+    'TOTAL_JOBS_SENT_TO_ENRICH',
+    'TOTAL_JOBS_DONT_HAVE_METADATA_V2',
+    'TOTAL_RECORDS_IN_FEED',
+    'TOTAL_JOBS_IN_FEED'
+  ]
+
+  const sortKey = nestedFields.includes(filterBy.sortField)
+    ? `progress.${filterBy.sortField}`
+    : filterBy.sortField
+
+  return { [sortKey]: filterBy.sortDir === 'asc' ? 1 : -1 }
+}
+
 
 
 async function runAggregation(pipeline) {

@@ -4,11 +4,14 @@ import { loadLogs } from '../../store/log.slice'
 import { DataGrid } from '@mui/x-data-grid'
 import { Box, Button, Stack } from '@mui/material'
 
-export function JobLogsTable({ logs, total }) {
+export function JobLogsTable({ logs, total, filterBy }) {
+  
   const dispatch = useDispatch()
 
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(25)
+  const [sortModel, setSortModel] = useState([])
+
   const [columnVisibilityModel, setColumnVisibilityModel] = useState({
     TOTAL_JOBS_SENT_TO_ENRICH: false,
     TOTAL_JOBS_DONT_HAVE_METADATA_V2: false,
@@ -19,11 +22,36 @@ export function JobLogsTable({ logs, total }) {
   const handlePaginationModelChange = (newPaginationModel) => {
     setPage(newPaginationModel.page)
     setPageSize(newPaginationModel.pageSize)
+
+    const sortField = sortModel[0]?.field || 'timestamp'
+    const sortDir = sortModel[0]?.sort || 'desc'
+
     dispatch(loadLogs({
       page: newPaginationModel.page,
-      pageSize: newPaginationModel.pageSize
+      pageSize: newPaginationModel.pageSize,
+      sortField,
+      sortDir,
+      filterBy
     }))
   }
+
+  const handleSortModelChange = (newSortModel) => {
+    setSortModel(newSortModel)
+    const sortField = newSortModel[0]?.field || 'timestamp'
+    const sortDir = newSortModel[0]?.sort || 'desc'
+
+    dispatch(loadLogs({
+      filterBy: {
+        ...filterBy,
+        sortField,
+        sortDir
+      },
+      page,
+      pageSize
+    }))
+
+  }
+
 
   const handleToggleColumn = (field) => {
     setColumnVisibilityModel(prev => ({
@@ -69,13 +97,13 @@ export function JobLogsTable({ logs, total }) {
       flex: 1,
       valueGetter: (value, row) => row?.progress?.TOTAL_JOBS_DONT_HAVE_METADATA_V2 ?? 'N/A',
     },
-      {
+    {
       field: 'TOTAL_RECORDS_IN_FEED',
       headerName: 'Total Records',
       flex: 1,
       valueGetter: (value, row) => row?.progress?.TOTAL_RECORDS_IN_FEED ?? 'N/A',
     },
-      {
+    {
       field: 'TOTAL_JOBS_IN_FEED',
       headerName: 'Jobs In Feed',
       flex: 1,
@@ -90,7 +118,7 @@ export function JobLogsTable({ logs, total }) {
   }))
 
   return (
-     <Box sx={{ width: '80%', marginTop: 4, marginInline: 'auto' }}>
+    <Box sx={{ width: '80%', marginTop: 4, marginInline: 'auto' }}>
       <Stack direction="row" spacing={2} mb={2} flexWrap="wrap">
         <Button onClick={() => handleToggleColumn('TOTAL_JOBS_SENT_TO_ENRICH')}>
           Toggle Enriched
@@ -111,8 +139,10 @@ export function JobLogsTable({ logs, total }) {
         columns={columns}
         rowCount={total}
         paginationMode="server"
+        sortingMode="server"
         page={page}
         pageSize={pageSize}
+        onSortModelChange={handleSortModelChange}
         onPaginationModelChange={handlePaginationModelChange}
         rowsPerPageOptions={[10, 25, 50]}
         columnVisibilityModel={columnVisibilityModel}

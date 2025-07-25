@@ -21,6 +21,9 @@ async function getLogs(req, res) {
         filterBy.to = toDate
       }
     }
+    
+    if (req.query.sortField) filterBy.sortField = req.query.sortField
+    if (req.query.sortDir) filterBy.sortDir = req.query.sortDir
 
     const page = parseInt(req.query.page) || 0
     const pageSize = parseInt(req.query.pageSize) || 25
