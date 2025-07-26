@@ -48,6 +48,20 @@ async function getAggregatedLogCounts(req, res) {
   }
 }
 
+async function getAggregatedFailedPercentage(req, res) {
+  try {
+    const fromDate = new Date(req.query.from)
+    const toDate = new Date(req.query.to)
+    fromDate.setUTCHours(0, 0, 0, 0)
+    toDate.setUTCHours(23,59,59)
+    const totals = await logService.getFailedLogsPercentage(fromDate, toDate)
+    res.json({ totals })
+  } catch (err) {
+    console.error('Failed to get aggregated log counts', err)
+    res.status(500).send({ error: 'Failed to get aggregated log counts', detail: err.message })
+  }
+}
+
 async function getLogCountsOverTime(req, res) {
   try {
     const fromDate = new Date(req.query.from)
@@ -63,5 +77,6 @@ async function getLogCountsOverTime(req, res) {
 module.exports = {
   getLogs,
   getAggregatedLogCounts,
-  getLogCountsOverTime
+  getLogCountsOverTime,
+  getAggregatedFailedPercentage
 }

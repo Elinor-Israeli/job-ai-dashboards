@@ -7,6 +7,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { JobLogsBarChart } from './JobLogsBarChart'
 import { JobLogsLineChart } from './JobLogsLineChart'
+import { FailedLogsBarChart } from './FailedLogsBarChart'
 import dayjs from 'dayjs'
 
 export function JobLogsSection() {
@@ -41,6 +42,7 @@ export function JobLogsSection() {
     <section >
       <JobLogsBarChart />
       <JobLogsLineChart />
+      <FailedLogsBarChart />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack direction="row" spacing={2} alignItems="center" mb={4} flexWrap="wrap"
           sx={{

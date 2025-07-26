@@ -18,6 +18,48 @@ async function query(filterBy = {}, limit = 25, page = 0) {
   }
 }
 
+async function getFailedLogsPercentage(fromDate, toDate) {
+  try {
+    const failedLogsIndex = await Log.aggregate([
+      {
+        $match: {
+          timestamp: { $gte: fromDate, $lte: toDate }
+        }
+      },
+      {
+        $group: {
+          _id: "$country_code",
+          totalFailedIndexJobs: { $sum: "$progress.TOTAL_JOBS_FAIL_INDEXED" },
+          totalJobsInFeed: { $sum: "$progress.TOTAL_JOBS_IN_FEED" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          country: "$_id",
+          failedIndexJobsPercentage: {
+            $cond: [
+              { $eq: ["$totalJobsInFeed", 0] },
+              0,
+              {
+                $multiply: [
+                  { $divide: ["$totalFailedIndexJobs", "$totalJobsInFeed"] },
+                  100
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ])
+    return failedLogsIndex
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
+}
+
+
 async function getLogsTotal(fromDate) {
   try {
     const resultsPerClient = await Log.aggregate([
@@ -169,4 +211,5 @@ module.exports = {
   runAggregation,
   getLogsTotal,
   getLogsTotalOverTime,
+  getFailedLogsPercentage
 }

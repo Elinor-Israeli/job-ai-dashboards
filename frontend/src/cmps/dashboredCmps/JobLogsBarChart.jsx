@@ -17,7 +17,7 @@ export function JobLogsBarChart() {
         } catch (err) {
           console.error('Error fetching totals:', err);
         }
-      };
+      }
       fetchData()
     }, [])
 
